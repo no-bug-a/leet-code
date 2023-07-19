@@ -8,7 +8,7 @@ public class P1911 {
 
     public static void main(String[] args) {
         System.out.println(new P1911().maxAlternatingSum(new int[]{
-                6,2,1,2,4,5
+                5,6,7,8
         }));
     }
 
@@ -37,32 +37,25 @@ public class P1911 {
      */
     public long maxAlternatingSum(int[] nums) {
         if (nums == null || nums.length == 0) return 0L;
-        int[] result = new int[nums.length];
         int notAddedMin = Integer.MAX_VALUE;
-        int lastIndex = 0;
-        for (int num : nums) {
+        int lastNum = nums[0];
+        long sum = lastNum;
+        for (int i = 1; i < nums.length; i++) {
             if (notAddedMin != Integer.MAX_VALUE) {
-                if (num > notAddedMin) {
-                    result[++lastIndex] = notAddedMin;
+                if (nums[i] > notAddedMin) {
+                    sum = sum - notAddedMin + nums[i];
+                    lastNum = nums[i];
                     notAddedMin = Integer.MAX_VALUE;
-                    result[++lastIndex] = num;
                 } else {
-                    notAddedMin = num;
+                    notAddedMin = nums[i];
                 }
             } else {
-                if (num > result[lastIndex]) {
-                    result[lastIndex] = num;
+                if (nums[i] > lastNum) {
+                    sum = sum - lastNum + nums[i];
+                    lastNum = nums[i];
                 } else {
-                    notAddedMin = num;
+                    notAddedMin = nums[i];
                 }
-            }
-        }
-        long sum = 0L;
-        for (int i = 0; i <= lastIndex; i++) {
-            if (i % 2 == 0) {
-                sum += result[i];
-            } else {
-                sum -= result[i];
             }
         }
         return sum;
@@ -70,7 +63,7 @@ public class P1911 {
 }
 
 /*
-时间复杂度O(n)，空间复杂度O(n)
+时间复杂度O(n)，空间复杂度O(1)
 子序列是由原始序列中的一些元素按照它们在原始序列中的出现顺序组成的新序列。由题意可知子序列的交替和最大时元素个数必定为奇数。
 整体思想：
 遍历数组。
